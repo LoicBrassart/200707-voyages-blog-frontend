@@ -1,5 +1,7 @@
+import TripForm from "../forms/TripForm";
+
 const initial = {
-  loggedIn: true,
+  loggedIn: false,
 };
 
 function userReducer(state = initial, action) {
@@ -8,11 +10,11 @@ function userReducer(state = initial, action) {
       return {
         ...state,
         loggedIn: true,
+        ...action.payload,
       };
     case "LOGOUT":
       return {
-        ...state,
-        loggedIn: false,
+        ...initial,
       };
     default:
       return state;

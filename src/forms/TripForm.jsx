@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { backend } from "../conf";
 
 export default function TripForm() {
   const [newTrip, setNewTrip] = useState({});
+  const authToken = useSelector((state) => state.currentUser.token);
 
   const handleChange = (e) => {
     const tmp = {
@@ -16,10 +19,33 @@ export default function TripForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`${backend}/trips`, newTrip)
-      .then()
+      .post(`${backend}/trips`, newTrip, {
+        headers: {
+          Authorization: "Bearer " + (authToken || null),
+        },
+      })
+      .then(() => {
+        toast.info("🦄 Yay!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
       .catch((err) => {
         console.log("Erreur:", err);
+        toast.error("🦄 Nay!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
   };
 
